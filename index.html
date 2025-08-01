@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chai & Coffee Shop - Semiliguda & Sunabeda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f3e9;
+            min-height: 100vh;
+            background-image: linear-gradient(to bottom, #f9f3e9, #e8dfd1);
+        }
+
+        .app-header {
+            background-color: #5d4037;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .app-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .location-banner {
+            background-color: #3e2723;
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .auth-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 1rem;
+            background-color: #d7ccc8;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .auth-tab.active {
+            background-color: #8d6e63;
+            color: white;
+        }
+
+        .auth-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .auth-form h2 {
+            margin-bottom: 1.5rem;
+            color: #5d4037;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #5d4037;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.85rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #8d6e63;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(141, 110, 99, 0.2);
+        }
+
+        .auth-btn {
+            width: 100%;
+            background-color: #5d4037;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .auth-btn:hover {
+            background-color: #3e2723;
+        }
+
+        .switch-auth {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+        }
+
+        .switch-auth a {
+            color: #5d4037;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .customer-view, .owner-view {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #d7ccc8;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .view-title {
+            color: #5d4037;
+            font-size: 1.8rem;
+        }
+
+        .logout-btn {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #b71c1c;
+        }
+
+        .customer-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .location-selector {
+            display: flex;
+            gap: 0.5rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .location-option {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .location-option.active {
+            background-color: #5d4037;
+            color: white;
+        }
+
+        .search-container {
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 0.75rem 2.5rem 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .customer-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .customer-tab {
+            padding: 0.75rem 1.5rem;
+            background-color: #d7ccc8;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .customer-tab.active {
+            background-color: #5d4037;
+            color: white;
+        }
+
+        .menu-container {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .category-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .category-section h3 {
+            color: #5d4037;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid #efebe9;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .menu-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            background-color: white;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        .item-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #5d4037;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .location-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4caf50;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            color: #ccc;
+            transition: all 0.3s;
+        }
+
+        .favorite-btn.active {
+            color: #ff5252;
+        }
+
+        .favorite-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            color: #ff5252;
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-details {
+            padding: 1.2rem;
+        }
+
+        .item-details h4 {
+            margin-bottom: 0.6rem;
+            color: #5d4037;
+            font-size: 1.2rem;
+        }
+
+        .item-details p {
+            color: #666;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+            min-height: 60px;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #3e2723;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price::before {
+            content: "₹";
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .quantity-controls button {
+            background-color: #8d6e63;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .quantity-controls button:hover {
+            background-color: #6d4c41;
+        }
+
+        .quantity-display {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .cart-container {
+            flex: 1;
+            min-width: 320px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            align-self: flex-start;
+            position: sticky;
+            top: 1rem;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #efebe9;
+        }
+
+        .cart-title {
+            color: #5d4037;
+            font-size: 1.4rem;
+        }
+
+        .cart-items {
+            list-style: none;
+            margin: 1.2rem 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .cart-items li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-name {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .item-quantity {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: #3e2723;
+        }
+
+        .delivery-info {
+            margin: 1.5rem 0;
+            padding: 1.2rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .delivery-info h4 {
+            margin-bottom: 1rem;
+            color: #5d4037;
+            font-size: 1.1rem;
+        }
+
+        .form-group-sm {
+            margin-bottom: 1rem;
+        }
+
+        .form-group-sm label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            color: #5d4037;
+            font-size: 0.9rem;
+        }
+
+        .form-group-sm input, .form-group-sm textarea {
+            width: 100%;
+            padding: 0.65rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .form-group-sm textarea {
+            min-height: 80px;
+        }
+
+        .payment-method {
+            margin-bottom: 1.2rem;
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.8rem;
+        }
+
+        .payment-option {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .payment-option.active {
+            border-color: #5d4037;
+            background-color: #f5f1ee;
+        }
+
+        .payment-option i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #5d4037;
+        }
+
+        .payment-option p {
+            font-size: 0.9rem;
+            color: #5d4037;
+            font-weight: 500;
+        }
+
+        .payment-details {
+            background-color: #f9f9f9;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .payment-details.active {
+            display: block;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin: 1.5rem 0;
+            padding-top: 1.2rem;
+            border-top: 2px solid #eee;
+        }
+
+        .total-label {
+            color: #5d4037;
+        }
+
+        .total-amount {
+            color: #3e2723;
+        }
+
+        .total-amount::before {
+            content: "₹";
+        }
+
+        .place-order-btn {
+            width: 100%;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 600;
+        }
+
+        .place-order-btn:hover {
+            background-color: #388e3c;
+        }
+
+        .place-order-btn:disabled {
+            background-color: #a5d6a7;
+            cursor: not-allowed;
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+            font-style: italic;
+        }
+
+        .owner-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        .control-card h3 {
+            color: #5d4037;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid #efebe9;
+            font-size: 1.3rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row input, .form-row select {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-row textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row button {
+            background-color: #5d4037;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            white-space: nowrap;
+            transition: background-color 0.3s;
+        }
+
+        .form-row button:hover {
+            background-color: #3e2723;
+        }
+
+        .payment-details-display {
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        .payment-details-display p {
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #5d4037;
+        }
+
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .order-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .order-card.pending {
+            border-left: 6px solid #ffa000;
+        }
+
+        .order-card.completed {
+            border-left: 6px solid #4caf50;
+            opacity: 0.9;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: #5d4037;
+        }
+
+        .order-time {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .order-status.pending {
+            background-color: #fff3e0;
+            color: #ff6f00;
+        }
+
+        .order-status.completed {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .order-items {
+            list-style: none;
+            margin: 0.8rem 0;
+        }
+
+        .order-items li {
+            padding: 0.4rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .customer-details {
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid #eee;
+        }
+
+        .customer-details p {
+            margin-bottom: 0.6rem;
+            line-height: 1.5;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .order-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #5d4037;
+        }
+
+        .order-total::before {
+            content: "₹";
+        }
+
+        .payment-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .payment-status.pending {
+            background-color: #fff3e0;
+            color: #ff6f00;
+        }
+
+        .payment-status.paid {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .complete-btn {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .complete-btn:hover {
+            background-color: #388e3c;
+        }
+
+        .mark-paid-btn {
+            background-color: #2196f3;
+            color: white;
+        }
+
+        .mark-paid-btn:hover {
+            background-color: #0b7dda;
+        }
+
+        .view-btn {
+            background-color: #5d4037;
+            color: white;
+        }
+
+        .view-btn:hover {
+            background-color: #3e2723;
+        }
+
+        @media (max-width: 768px) {
+            .menu-container {
+                flex-direction: column;
+            }
+            
+            .cart-container {
+                position: static;
+                margin-top: 1.5rem;
+            }
+            
+            .owner-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .customer-controls {
+                flex-direction: column;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+            
+            .payment-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header class="app-header">
+            <h1><i class="fas fa-mug-hot"></i> Chai & Coffee Shop</h1>
+            <div class="location-banner">
+                Available only in Semiliguda and Sunabeda
+            </div>
+        </header>
+
+        <!-- Authentication Section -->
+        <div id="auth-section" class="auth-container">
+            <div class="auth-tabs">
+                <button id="customer-login-tab" class="auth-tab active">Customer Login</button>
+                <button id="customer-signup-tab" class="auth-tab">Customer Sign Up</button>
+                <button id="owner-login-tab" class="auth-tab">Shop Owner</button>
+            </div>
+            
+            <div id="customer-login-form" class="auth-form">
+                <h2>Customer Login</h2>
+                <div class="form-group">
+                    <label for="customer-login-phone">Phone Number</label>
+                    <input type="tel" id="customer-login-phone" placeholder="Enter your phone number">
+                </div>
+                <button id="customer-login-btn" class="auth-btn">Login</button>
+            </div>
+            
+            <div id="customer-signup-form" class="auth-form" style="display: none;">
+                <h2>Customer Sign Up</h2>
+                <div class="form-group">
+                    <label for="customer-signup-name">Full Name</label>
+                    <input type="text" id="customer-signup-name" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="customer-signup-phone">Phone Number</label>
+                    <input type="tel" id="customer-signup-phone" placeholder="Enter your phone number">
+                </div>
+                <button id="customer-signup-btn" class="auth-btn">Sign Up</button>
+                <div class="switch-auth">
+                    Already have an account? <a id="switch-to-login">Login</a>
+                </div>
+            </div>
+            
+            <div id="owner-login-form" class="auth-form" style="display: none;">
+                <h2>Shop Owner Login</h2>
+                <div class="form-group">
+                    <label for="owner-username">Username</label>
+                    <input type="text" id="owner-username" placeholder="Enter owner username">
+                </div>
+                <div class="form-group">
+                    <label for="owner-password">Password</label>
+                    <input type="password" id="owner-password" placeholder="Enter password">
+                </div>
+                <button id="owner-login-btn" class="auth-btn">Login</button>
+            </div>
+        </div>
+
+        <!-- Customer View -->
+        <div id="customer-view" class="customer-view">
+            <div class="view-header">
+                <h2 class="view-title">Menu</h2>
+                <div class="customer-controls">
+                    <div class="location-selector">
+                        <div class="location-option active" data-location="semiliguda">Semiliguda</div>
+                        <div class="location-option" data-location="sunabeda">Sunabeda</div>
+                    </div>
+                    <button id="customer-logout-btn" class="logout-btn">Logout</button>
+                </div>
+            </div>
+            
+            <div class="menu-container">
+                <div class="category-section">
+                    <h3><i class="fas fa-mug-hot"></i> Chai</h3>
+                    <div class="menu-items" id="tea-items">
+                        <!-- Tea items will be inserted here by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="category-section">
+                    <h3><i class="fas fa-coffee"></i> Coffee</h3>
+                    <div class="menu-items" id="coffee-items">
+                        <!-- Coffee items will be inserted here by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="category-section">
+                    <h3><i class="fas fa-smoking"></i> Cigarettes & Accessories</h3>
+                    <div class="menu-items" id="cigarette-items">
+                        <!-- Cigarette items will be inserted here by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="cart-container">
+                    <div class="cart-header">
+                        <h3 class="cart-title">Your Order</h3>
+                        <span id="total-items">0 items</span>
+                    </div>
+                    
+                    <div id="cart-content">
+                        <div class="empty-cart-message">
+                            <p>Your cart is empty</p>
+                            <p>Add items to place an order</p>
+                        </div>
+                    </div>
+                    
+                    <div class="delivery-info">
+                        <h4>Delivery Information</h4>
+                        <div class="form-group-sm">
+                            <label for="delivery-address">Delivery Address</label>
+                            <textarea id="delivery-address" placeholder="Enter your full delivery address"></textarea>
+                        </div>
+                        <div class="form-group-sm">
+                            <label for="delivery-phone">Phone Number</label>
+                            <input type="tel" id="delivery-phone" placeholder="Enter your phone number">
+                        </div>
+                    </div>
+                    
+                    <div class="payment-method">
+                        <h4>Payment Method</h4>
+                        <div class="payment-options">
+                            <div class="payment-option active" data-method="cod">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <p>Cash on Delivery</p>
+                            </div>
+                            <div class="payment-option" data-method="online">
+                                <i class="fas fa-mobile-alt"></i>
+                                <p>Online Payment</p>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-details" id="online-payment-details">
+                            <div class="form-group-sm">
+                                <label for="upi-id">UPI ID</label>
+                                <input type="text" id="upi-id" placeholder="Enter your UPI ID">
+                            </div>
+                            <p style="font-size: 0.8rem; color: #777; margin-top: 0.5rem;">Or pay with card at delivery</p>
+                        </div>
+                    </div>
+                    
+                    <div class="cart-total">
+                        <span class="total-label">Total:</span>
+                        <span class="total-amount" id="total-amount">0.00</span>
+                    </div>
+                    
+                    <button id="place-order-btn" class="place-order-btn" disabled>Place Order</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Owner View -->
+        <div id="owner-view" class="owner-view">
+            <div class="view-header">
+                <h2 class="view-title">Shop Owner Dashboard</h2>
+                <button id="owner-logout-btn" class="logout-btn">Logout</button>
+            </div>
+            
+            <div class="owner-controls">
+                <div class="control-card">
+                    <h3>Edit Prices</h3>
+                    <div class="form-row">
+                        <select id="item-select">
+                            <option value="">Select Item to Edit</option>
+                            <!-- Options will be added by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <input type="number" id="new-price" placeholder="New Price (₹)" min="1">
+                        <button id="update-price-btn">Update Price</button>
+                    </div>
+                </div>
+                
+                <div class="control-card">
+                    <h3>Payment Details</h3>
+                    <div class="form-row">
+                        <input type="text" id="bank-account" placeholder="Bank Account Number">
+                    </div>
+                    <div class="form-row">
+                        <input type="text" id="owner-upi-id" placeholder="UPI ID (e.g., name@bank)">
+                    </div>
+                    <div class="form-row">
+                        <button id="save-payment-details-btn">Save Payment Details</button>
+                    </div>
+                    <div class="payment-details-display">
+                        <p><span class="detail-label">Bank Account:</span> <span id="bank-account-display">Not set</span></p>
+                        <p><span class="detail-label">UPI ID:</span> <span id="upi-id-display">Not set</span></p>
+                    </div>
+                </div>
+                
+                <div class="control-card">
+                    <h3>Add New Item</h3>
+                    <div class="form-row">
+                        <input type="text" id="new-item-name" placeholder="Item Name">
+                    </div>
+                    <div class="form-row">
+                        <input type="number" id="new-item-price" placeholder="Price (₹)" min="1">
+                        <select id="new-item-category">
+                            <option value="tea">Chai</option>
+                            <option value="coffee">Coffee</option>
+                            <option value="cigarette">Cigarette</option>
+                            <option value="accessory">Accessory</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <textarea id="new-item-description" placeholder="Item Description"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <select id="new-item-location" multiple>
+                            <option value="semiliguda">Semiliguda</option>
+                            <option value="sunabeda">Sunabeda</option>
+                        </select>
+                        <button id="add-item-btn">Add Item</button>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="view-title">Order Queue</h3>
+            <div class="order-list" id="order-list">
+                <div class="empty-orders-message">
+                    <p>No orders yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Menu data with Indian prices and specialties
+        let menuItems = [
+            // Tea items
+            {
+                id: 1,
+                name: 'Masala Chai',
+                description: 'Traditional spiced Indian tea with milk and aromatic spices',
+                price: 20,
+                category: 'tea',
+                image: 'https://images.unsplash.com/photo-1597318181409-cf64d0b5d8a2?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['semiliguda', 'sunabeda']
+            },
+            {
+                id: 2,
+                name: 'Adrak Chai',
+                description: 'Ginger-infused tea with a spicy kick',
+                price: 25,
+                category: 'tea',
+                image: 'https://images.unsplash.com/photo-1571934811356-5cc061b6821f?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['semiliguda']
+            },
+            {
+                id: 3,
+                name: 'Elaichi Chai',
+                description: 'Cardamom flavored aromatic tea',
+                price: 25,
+                category: 'tea',
+                image: 'https://images.unsplash.com/photo-1580633757481-46d35812488c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['sunabeda']
+            },
+            {
+                id: 4,
+                name: 'Kulhad Chai',
+                description: 'Tea served in traditional clay cup for earthy flavor',
+                price: 30,
+                category: 'tea',
+                image: 'https://images.unsplash.com/photo-1603732551655-1d72d279af34?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['semiliguda']
+            },
+            {
+                id: 5,
+                name: 'Irani Chai',
+                description: 'Hyderabadi style sweet and creamy tea',
+                price: 25,
+                category: 'tea',
+                image: 'https://images.unsplash.com/photo-1611944212129-29977ae1398c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['sunabeda']
+            },
+            
+            // Coffee items
+            {
+                id: 6,
+                name: 'Filter Coffee',
+                description: 'South Indian style strong filter coffee',
+                price: 30,
+                category: 'coffee',
+                image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['semiliguda', 'sunabeda']
+            },
+            {
+                id: 7,
+                name: 'Black Coffee',
+                description: 'Strong black coffee without milk',
+                price: 25,
+                category: 'coffee',
+                image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['semiliguda', 'sunabeda']
+            },
+            {
+                id: 8,
+                name: 'Cold Coffee',
+                description: 'Iced coffee with milk and sugar',
+                price: 50,
+                category: 'coffee',
+                image: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['semiliguda']
+            },
+            
+            // Cigarette items
+            {
+                id: 9,
+                name: 'Gold Flake',
+                description: 'Gold Flake Kings cigarette pack',
+                price: 100,
+                category: 'cigarette',
+                image: 'https://images.unsplash.com/photo-1611944212129-29977ae1398c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['semiliguda', 'sunabeda']
+            },
+            {
+                id: 10,
+                name: 'Gold Flake Mint',
+                description: 'Gold Flake Mint cigarette pack',
+                price: 120,
+                category: 'cigarette',
+                image: 'https://images.unsplash.com/photo-1603398938373-e54da0bbf9e8?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['semiliguda']
+            },
+            {
+                id: 11,
+                name: 'Aditions',
+                description: 'Aditions cigarette pack',
+                price: 110,
+                category: 'cigarette',
+                image: 'https://images.unsplash.com/photo-1603398938373-e54da0bbf9e8?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['sunabeda']
+            },
+            {
+                id: 12,
+                name: 'Players',
+                description: 'Players cigarette pack',
+                price: 90,
+                category: 'cigarette',
+                image: 'https://images.unsplash.com/photo-1603398938373-e54da0bbf9e8?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['semiliguda', 'sunabeda']
+            },
+            {
+                id: 13,
+                name: 'Black Filler',
+                description: 'Black Filler cigarette pack',
+                price: 80,
+                category: 'cigarette',
+                image: 'https://images.unsplash.com/photo-1603398938373-e54da0bbf9e8?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['semiliguda']
+            },
+            {
+                id: 14,
+                name: 'Cigarette Lighter',
+                description: 'Standard cigarette lighter',
+                price: 20,
+                category: 'accessory',
+                image: 'https://images.unsplash.com/photo-1589985270827-4dc04c0e21a0?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=150&w=280',
+                locations: ['semiliguda', 'sunabeda']
+            }
+        ];
+
+        // App state
+        let cart = [];
+        let orders = [];
+        let activeLocation = 'semiliguda'; // default location
+        let paymentDetails = {
+            bankAccount: '',
+            upiId: ''
+        };
+        let isOwnerLoggedIn = false;
+        let currentCustomer = null;
+        let customers = [];
+        let paymentMethod = 'cod';
+
+        // Owner credentials
+        const ownerCredentials = {
+            username: "owner123",
+            password: "chai@2023"
+        };
+
+        // DOM elements
+        const authSection = document.getElementById('auth-section');
+        const customerLoginTab = document.getElementById('customer-login-tab');
+        const customerSignupTab = document.getElementById('customer-signup-tab');
+        const ownerLoginTab = document.getElementById('owner-login-tab');
+        const customerLoginForm = document.getElementById('customer-login-form');
+        const customerSignupForm = document.getElementById('customer-signup-form');
+        const ownerLoginForm = document.getElementById('owner-login-form');
+        const customerLoginBtn = document.getElementById('customer-login-btn');
+        const customerSignupBtn = document.getElementById('customer-signup-btn');
+        const ownerLoginBtn = document.getElementById('owner-login-btn');
+        const switchToLoginLink = document.getElementById('switch-to-login');
+        const customerView = document.getElementById('customer-view');
+        const ownerView = document.getElementById('owner-view');
+        const customerLogoutBtn = document.getElementById('customer-logout-btn');
+        const ownerLogoutBtn = document.getElementById('owner-logout-btn');
+        const teaItemsContainer = document.getElementById('tea-items');
+        const coffeeItemsContainer = document.getElementById('coffee-items');
+        const cigaretteItemsContainer = document.getElementById('cigarette-items');
+        const cartContent = document.getElementById('cart-content');
+        const totalItemsSpan = document.getElementById('total-items');
+        const totalAmountSpan = document.getElementById('total-amount');
+        const placeOrderBtn = document.getElementById('place-order-btn');
+        const orderList = document.getElementById('order-list');
+        const itemSelect = document.getElementById('item-select');
+        const newPriceInput = document.getElementById('new-price');
+        const updatePriceBtn = document.getElementById('update-price-btn');
+        const bankAccountInput = document.getElementById('bank-account');
+        const upiIdInput = document.getElementById('owner-upi-id');
+        const savePaymentDetailsBtn = document.getElementById('save-payment-details-btn');
+        const bankAccountDisplay = document.getElementById('bank-account-display');
+        const upiIdDisplay = document.getElementById('upi-id-display');
+        const newItemNameInput = document.getElementById('new-item-name');
+        const newItemPriceInput = document.getElementById('new-item-price');
+        const newItemCategorySelect = document.getElementById('new-item-category');
+        const newItemDescriptionInput = document.getElementById('new-item-description');
+        const newItemLocationSelect = document.getElementById('new-item-location');
+        const addItemBtn = document.getElementById('add-item-btn');
+        const locationOptions = document.querySelectorAll('.location-option');
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        const onlinePaymentDetails = document.getElementById('online-payment-details');
+        const deliveryAddress = document.getElementById('delivery-address');
+        const deliveryPhone = document.getElementById('delivery-phone');
+        const customerUpiId = document.getElementById('upi-id');
+
+        // Initialize the app
+        function init() {
+            // Start with login form visible
+            authSection.style.display = 'block';
+            customerView.style.display = 'none';
+            ownerView.style.display = 'none';
+            
+            renderMenuItems();
+            setupEventListeners();
+            populateItemSelect();
+            updatePaymentDetailsDisplay();
+        }
+
+        // Switch between auth tabs
+        function showCustomerLogin() {
+            customerLoginTab.classList.add('active');
+            customerSignupTab.classList.remove('active');
+            ownerLoginTab.classList.remove('active');
+            customerLoginForm.style.display = 'block';
+            customerSignupForm.style.display = 'none';
+            ownerLoginForm.style.display = 'none';
+        }
+
+        function showCustomerSignup() {
+            customerLoginTab.classList.remove('active');
+            customerSignupTab.classList.add('active');
+            ownerLoginTab.classList.remove('active');
+            customerLoginForm.style.display = 'none';
+            customerSignupForm.style.display = 'block';
+            ownerLoginForm.style.display = 'none';
+        }
+
+        function showOwnerLogin() {
+            customerLoginTab.classList.remove('active');
+            customerSignupTab.classList.remove('active');
+            ownerLoginTab.classList.add('active');
+            customerLoginForm.style.display = 'none';
+            customerSignupForm.style.display = 'none';
+            ownerLoginForm.style.display = 'block';
+        }
+
+        // Customer login function
+        function handleCustomerLogin() {
+            const phone = document.getElementById('customer-login-phone').value.trim();
+            
+            if (!phone || !/^\d{10}$/.test(phone)) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+            
+            // Check if customer exists
+            const customer = customers.find(c => c.phone === phone);
+            if (!customer) {
+                alert('Customer not found. Please sign up first.');
+                showCustomerSignup();
+                return;
+            }
+            
+            currentCustomer = customer;
+            authSection.style.display = 'none';
+            customerView.style.display = 'block';
+            renderMenuItems();
+            
+            // Pre-fill delivery phone
+            deliveryPhone.value = customer.phone;
+        }
+
+        // Customer signup function
+        function handleCustomerSignup() {
+            const name = document.getElementById('customer-signup-name').value.trim();
+            const phone = document.getElementById('customer-signup-phone').value.trim();
+            
+            if (!name || !phone) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (!/^\d{10}$/.test(phone)) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+            
+            // Check if customer already exists
+            if (customers.some(c => c.phone === phone)) {
+                alert('Customer already exists. Please login instead.');
+                showCustomerLogin();
+                return;
+            }
+            
+            // Create new customer
+            const newCustomer = {
+                id: Date.now(),
+                name,
+                phone
+            };
+            
+            customers.push(newCustomer);
+            currentCustomer = newCustomer;
+            authSection.style.display = 'none';
+            customerView.style.display = 'block';
+            renderMenuItems();
+            
+            // Pre-fill delivery phone
+            deliveryPhone.value = phone;
+            
+            alert('Sign up successful!');
+        }
+
+        // Owner login function
+        function handleOwnerLogin() {
+            const username = document.getElementById('owner-username').value.trim();
+            const password = document.getElementById('owner-password').value.trim();
+            
+            if (username === ownerCredentials.username && password === ownerCredentials.password) {
+                isOwnerLoggedIn = true;
+                authSection.style.display = 'none';
+                ownerView.style.display = 'block';
+                renderOrders();
+                alert('Owner login successful!');
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+
+        // Logout function
+        function handleLogout() {
+            isOwnerLoggedIn = false;
+            currentCustomer = null;
+            authSection.style.display = 'block';
+            customerView.style.display = 'none';
+            ownerView.style.display = 'none';
+            showCustomerLogin();
+            
+            // Clear form inputs
+            document.getElementById('customer-login-phone').value = '';
+            document.getElementById('customer-signup-name').value = '';
+            document.getElementById('customer-signup-phone').value = '';
+            document.getElementById('owner-username').value = '';
+            document.getElementById('owner-password').value = '';
+            
+            // Reset cart
+            cart = [];
+            updateCart();
+        }
+
+        // Change location
+        function changeLocation(location) {
+            activeLocation = location;
+            locationOptions.forEach(option => {
+                if (option.getAttribute('data-location') === location) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+            renderMenuItems();
+        }
+
+        // Change payment method
+        function changePaymentMethod(method) {
+            paymentMethod = method;
+            paymentOptions.forEach(option => {
+                if (option.getAttribute('data-method') === method) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+            
+            // Show/hide online payment details
+            if (method === 'online') {
+                onlinePaymentDetails.classList.add('active');
+            } else {
+                onlinePaymentDetails.classList.remove('active');
+            }
+        }
+
+        // Filter menu items by current location
+        function getAvailableItems() {
+            return menuItems.filter(item => item.locations.includes(activeLocation));
+        }
+
+        // Render menu items based on category
+        function renderMenuItems() {
+            teaItemsContainer.innerHTML = '';
+            coffeeItemsContainer.innerHTML = '';
+            cigaretteItemsContainer.innerHTML = '';
+            
+            const availableItems = getAvailableItems();
+            
+            // Filter items by category
+            const teaItems = availableItems.filter(item => item.category === 'tea');
+            const coffeeItems = availableItems.filter(item => item.category === 'coffee');
+            const cigaretteItems = availableItems.filter(item => item.category === 'cigarette' || item.category === 'accessory');
+            
+            // Render tea items
+            if (teaItems.length > 0) {
+                teaItems.forEach(item => {
+                    teaItemsContainer.appendChild(createMenuItemElement(item));
+                });
+            } else {
+                teaItemsContainer.innerHTML = '<p class="empty-message">No tea items available</p>';
+            }
+            
+            // Render coffee items
+            if (coffeeItems.length > 0) {
+                coffeeItems.forEach(item => {
+                    coffeeItemsContainer.appendChild(createMenuItemElement(item));
+                });
+            } else {
+                coffeeItemsContainer.innerHTML = '<p class="empty-message">No coffee items available</p>';
+            }
+            
+            // Render cigarette items
+            if (cigaretteItems.length > 0) {
+                cigaretteItems.forEach(item => {
+                    cigaretteItemsContainer.appendChild(createMenuItemElement(item));
+                });
+            } else {
+                cigaretteItemsContainer.innerHTML = '<p class="empty-message">No cigarette items available</p>';
+            }
+        }
+
+        // Create menu item element
+        function createMenuItemElement(item) {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'menu-item';
+            
+            // Show category tag
+            const categoryTag = `<span class="item-tag">${item.category === 'cigarette' ? 'Cigarette' : (item.category === 'accessory' ? 'Accessory' : item.category)}</span>`;
+            
+            // Show location tag if item is not available in both locations
+            const locationTag = item.locations.length === 1 ? 
+                `<span class="location-tag">${item.locations[0] === 'semiliguda' ? 'Semiliguda' : 'Sunabeda'}</span>` : '';
+            
+            itemElement.innerHTML = `
+                ${categoryTag}
+                ${locationTag}
+                <img src="${item.image}" alt="${item.name}">
+                <div class="item-details">
+                    <h4>${item.name}</h4>
+                    <p>${item.description}</p>
+                    <div class="price">${item.price.toFixed(2)}
+                        <div class="quantity-controls">
+                            <button class="decrease-btn" data-id="${item.id}">-</button>
+                            <span class="quantity-display" data-id="${item.id}">${getItemQuantity(item.id)}</span>
+                            <button class="increase-btn" data-id="${item.id}">+</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return itemElement;
+        }
+
+        // Get quantity of an item in cart
+        function getItemQuantity(itemId) {
+            const item = cart.find(item => item.id === itemId);
+            return item ? item.quantity : 0;
+        }
+
+        // Update cart display
+        function updateCart() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            totalItemsSpan.textContent = `${totalItems} ${totalItems === 1 ? 'item' : 'items'}`;
+            totalAmountSpan.textContent = totalAmount.toFixed(2);
+            placeOrderBtn.disabled = totalItems === 0;
+
+            if (totalItems === 0) {
+                cartContent.innerHTML = `
+                    <div class="empty-cart-message">
+                        <p>Your cart is empty</p>
+                        <p>Add items to place an order</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let cartHTML = '<ul class="cart-items">';
+            cart.forEach(item => {
+                cartHTML += `
+                    <li>
+                        <div class="item-info">
+                            <span class="item-name">${item.name}</span>
+                            <span class="item-quantity">Quantity: ${item.quantity}</span>
+                        </div>
+                        <span class="item-price">₹${(item.price * item.quantity).toFixed(2)}</span>
+                    </li>
+                `;
+            });
+            cartHTML += '</ul>';
+            cartContent.innerHTML = cartHTML;
+            
+            // Update quantities in menu
+            document.querySelectorAll('.quantity-display').forEach(display => {
+                const itemId = parseInt(display.getAttribute('data-id'));
+                display.textContent = getItemQuantity(itemId);
+            });
+        }
+
+        // Add item to cart
+        function addToCart(itemId) {
+            const item = menuItems.find(item => item.id === itemId);
+            if (!item) return;
+
+            const existingItem = cart.find(cartItem => cartItem.id === itemId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...item, quantity: 1 });
+            }
+
+            updateCart();
+        }
+
+        // Remove item from cart
+        function removeFromCart(itemId) {
+            const existingItemIndex = cart.findIndex(item => item.id === itemId);
+            if (existingItemIndex === -1) return;
+
+            if (cart[existingItemIndex].quantity > 1) {
+                cart[existingItemIndex].quantity -= 1;
+            } else {
+                cart.splice(existingItemIndex, 1);
+            }
+
+            updateCart();
+        }
+
+        // Update payment details display
+        function updatePaymentDetailsDisplay() {
+            bankAccountDisplay.textContent = paymentDetails.bankAccount || 'Not set';
+            upiIdDisplay.textContent = paymentDetails.upiId || 'Not set';
+        }
+
+        // Save payment details
+        function savePaymentDetails() {
+            const bankAccount = bankAccountInput.value.trim();
+            const upiId = upiIdInput.value.trim();
+
+            if (!bankAccount && !upiId) {
+                alert('Please enter at least one payment detail (Bank Account or UPI ID)');
+                return;
+            }
+
+            if (bankAccount && !/^\d{9,18}$/.test(bankAccount)) {
+                alert('Please enter a valid bank account number (9-18 digits)');
+                return;
+            }
+
+            if (upiId && !/^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/.test(upiId)) {
+                alert('Please enter a valid UPI ID (e.g., name@bank)');
+                return;
+            }
+
+            paymentDetails.bankAccount = bankAccount;
+            paymentDetails.upiId = upiId;
+            updatePaymentDetailsDisplay();
+            bankAccountInput.value = '';
+            upiIdInput.value = '';
+            alert('Payment details saved successfully!');
+        }
+
+        // Add new item to menu
+        function addNewItem() {
+            const name = newItemNameInput.value.trim();
+            const price = parseFloat(newItemPriceInput.value);
+            const category = newItemCategorySelect.value;
+            const description = newItemDescriptionInput.value.trim();
+            const locations = Array.from(newItemLocationSelect.selectedOptions).map(option => option.value);
+            
+            if (!name || isNaN(price) || price <= 0 || !description || locations.length === 0) {
+                alert('Please fill in all fields with valid values');
+                return;
+            }
+            
+            const newItem = {
+                id: Date.now(),
+                name,
+                description,
+                price,
+                category,
+                image: `https://via.placeholder.com/280x160/cccccc/333333?text=${encodeURIComponent(name)}`,
+                locations
+            };
+            
+            menuItems.push(newItem);
+            
+            // Clear form
+            newItemNameInput.value = '';
+            newItemPriceInput.value = '';
+            newItemDescriptionInput.value = '';
+            newItemLocationSelect.selectedIndex = -1;
+            
+            // Update UI
+            renderMenuItems();
+            populateItemSelect();
+            alert('Item added successfully!');
+        }
+
+        // Place order
+        function placeOrder() {
+            if (cart.length === 0) return;
+            
+            // Validate delivery information
+            const address = deliveryAddress.value.trim();
+            const phone = deliveryPhone.value.trim();
+            
+            if (!address) {
+                alert('Please enter your delivery address');
+                return;
+            }
+            
+            if (!phone || !/^\d{10}$/.test(phone)) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+            
+            // Validate online payment if selected
+            if (paymentMethod === 'online') {
+                const upiId = customerUpiId.value.trim();
+                if (!upiId && !confirm('Are you sure you want to pay with cash at delivery?')) {
+                    return;
+                }
+            }
+            
+            const customerName = currentCustomer ? currentCustomer.name : "Guest";
+            const customerPhone = currentCustomer ? currentCustomer.phone : "Not provided";
+            
+            const newOrder = {
+                id: Date.now(),
+                items: [...cart],
+                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                timestamp: new Date().toLocaleString(),
+                status: 'pending',
+                paymentStatus: paymentMethod === 'cod' ? 'pending' : 'paid',
+                paymentMethod: paymentMethod,
+                deliveryAddress: address,
+                deliveryPhone: phone,
+                customer: {
+                    name: customerName,
+                    phone: customerPhone,
+                    location: activeLocation
+                }
+            };
+            
+            orders.unshift(newOrder);
+            cart = [];
+            
+            updateCart();
+            renderMenuItems();
+            renderOrders();
+            
+            // Reset form
+            deliveryAddress.value = '';
+            deliveryPhone.value = currentCustomer ? currentCustomer.phone : '';
+            changePaymentMethod('cod');
+            
+            alert(`Order #${newOrder.id} placed successfully! Total: ₹${newOrder.total.toFixed(2)}`);
+        }
+
+        // Mark order as completed
+        function markAsCompleted(orderId) {
+            const order = orders.find(order => order.id === orderId);
+            if (order) {
+                order.status = 'completed';
+                renderOrders();
+            }
+        }
+
+        // Update item price
+        function updateItemPrice(itemId, newPrice) {
+            const itemIndex = menuItems.findIndex(item => item.id === itemId);
+            if (itemIndex === -1) return false;
+
+            menuItems[itemIndex].price = parseFloat(newPrice);
+            
+            // Update cart if this item is in cart
+            const cartItemIndex = cart.findIndex(item => item.id === itemId);
+            if (cartItemIndex !== -1) {
+                cart[cartItemIndex].price = parseFloat(newPrice);
+                updateCart();
+            }
+            
+            renderMenuItems();
+            populateItemSelect();
+            return true;
+        }
+
+        // Render orders in owner view
+        function renderOrders() {
+            if (orders.length === 0) {
+                orderList.innerHTML = '<div class="empty-orders-message"><p>No orders yet</p></div>';
+                return;
+            }
+
+            let ordersHTML = '';
+            orders.forEach(order => {
+                ordersHTML += `
+                    <div class="order-card ${order.status}">
+                        <div class="order-header">
+                            <span class="order-id">Order #${order.id}</span>
+                            <span class="order-time">${order.timestamp}</span>
+                            <span class="order-status ${order.status}">${order.status}</span>
+                        </div>
+                        <ul class="order-items">
+                            ${order.items.map(item => `
+                                <li>
+                                    <span>${item.name} x ${item.quantity}</span>
+                                    <span>₹${(item.price * item.quantity).toFixed(2)}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                        <div class="customer-details">
+                            <p><span class="detail-label">Customer:</span> ${order.customer.name}</p>
+                            <p><span class="detail-label">Phone:</span> ${order.customer.phone}</p>
+                            <p><span class="detail-label">Location:</span> ${order.customer.location === 'semiliguda' ? 'Semiliguda' : 'Sunabeda'}</p>
+                            <p><span class="detail-label">Delivery Address:</span> ${order.deliveryAddress}</p>
+                            <p><span class="detail-label">Delivery Phone:</span> ${order.deliveryPhone}</p>
+                            <p><span class="detail-label">Payment Method:</span> ${order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment'}</p>
+                        </div>
+                        <div class="order-footer">
+                            <span class="order-total">${order.total.toFixed(2)}</span>
+                            <div class="payment-status ${order.paymentStatus}">${order.paymentStatus}</div>
+                            <div class="action-buttons">
+                                ${order.status === 'pending' ? `
+                                    <button class="action-btn complete-btn" data-id="${order.id}">Complete Order</button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            orderList.innerHTML = ordersHTML;
+
+            // Add event listeners to action buttons
+            document.querySelectorAll('.complete-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const orderId = parseInt(button.getAttribute('data-id'));
+                    markAsCompleted(orderId);
+                });
+            });
+        }
+
+        // Populate item select for price editing
+        function populateItemSelect() {
+            itemSelect.innerHTML = '<option value="">Select Item to Edit</option>';
+            menuItems.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.id;
+                option.textContent = `${item.name} (Current: ₹${item.price})`;
+                itemSelect.appendChild(option);
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Auth tabs
+            customerLoginTab.addEventListener('click', showCustomerLogin);
+            customerSignupTab.addEventListener('click', showCustomerSignup);
+            ownerLoginTab.addEventListener('click', showOwnerLogin);
+            switchToLoginLink.addEventListener('click', showCustomerLogin);
+
+            // Login/signup buttons
+            customerLoginBtn.addEventListener('click', handleCustomerLogin);
+            customerSignupBtn.addEventListener('click', handleCustomerSignup);
+            ownerLoginBtn.addEventListener('click', handleOwnerLogin);
+
+            // Logout buttons
+            customerLogoutBtn.addEventListener('click', handleLogout);
+            ownerLogoutBtn.addEventListener('click', handleLogout);
+
+            // Place order button
+            placeOrderBtn.addEventListener('click', placeOrder);
+
+            // Location selector
+            locationOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    changeLocation(option.getAttribute('data-location'));
+                });
+            });
+
+            // Payment method selector
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    changePaymentMethod(option.getAttribute('data-method'));
+                });
+            });
+
+            // Delegate events for menu item buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('increase-btn')) {
+                    const itemId = parseInt(e.target.getAttribute('data-id'));
+                    addToCart(itemId);
+                } else if (e.target.classList.contains('decrease-btn')) {
+                    const itemId = parseInt(e.target.getAttribute('data-id'));
+                    removeFromCart(itemId);
+                }
+            });
+
+            // Update price button
+            updatePriceBtn.addEventListener('click', () => {
+                const itemId = parseInt(itemSelect.value);
+                const newPrice = parseFloat(newPriceInput.value);
+                
+                if (!itemId || isNaN(newPrice) || newPrice <= 0) {
+                    alert('Please select an item and enter a valid price');
+                    return;
+                }
+                
+                if (updateItemPrice(itemId, newPrice)) {
+                    alert('Price updated successfully!');
+                    newPriceInput.value = '';
+                } else {
+                    alert('Failed to update price. Item not found.');
+                }
+            });
+
+            // Save payment details button
+            savePaymentDetailsBtn.addEventListener('click', savePaymentDetails);
+
+            // Add new item button
+            addItemBtn.addEventListener('click', addNewItem);
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
